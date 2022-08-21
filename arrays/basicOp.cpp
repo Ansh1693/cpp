@@ -282,7 +282,7 @@ int main()
     arr2->append(10);
     arr2->append(11);
     arr2->append(15);
-    Array *arr3=arr1->Union(*arr2);
+    Array *arr3=arr1->Union     (*arr2);
     arr3->display();
 
     // arr1.sort(arr1,arr1+arr1->len);
