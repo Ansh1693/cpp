@@ -8,76 +8,42 @@ class Node{
     public:
         int data;
         Node *next;
+    
 };
 
 class LinkedList{
     private:
         Node *first;
+        Node *last;
     public:
         LinkedList(){
             first=NULL;
         }
         LinkedList(int A[],int n);
-        ~LinkedList(){
-            Node *temp=first;
-            while(temp!=NULL){
-                first=first->next;
-                delete temp;
-                temp=first;
-            }
-        };
-
-        void Display(){
-            Node *temp=first;
-            while(temp!=NULL){
-                cout<<temp->data<<" ";
-                temp=temp->next;
-            }
-            cout<<endl;
-        };
-        // void Insert(int index,int x);
-        // int Delete(int index);
-        int Length(){
-            Node *temp=first;
-            int count=0;
-            while(temp!=NULL){
-                count++;
-                temp=temp->next;
-            }
-            return count;
-        };
-        int Sum(){
-            Node *temp=first;
-            int sum=0;
-            while(temp!=NULL){
-                sum+= temp->data;
-                temp=temp->next;
-            }
-            return sum;
-        };
-        int max(){
-            Node *temp=first;
-            int max=0;
-            while(temp!=NULL){
-                if(temp->data>max)
-                    max=temp->data;
-                temp=temp->next;
-            }
-            return max;
-        };
+        ~LinkedList();
+        void Display();
+        int Length();
+        int Sum();
+        int max();
+        void insertAtHead(int x);
+        void insertAtTail(int x);
+        void insert(int index,int x);
+        int Delete(int index);
 };
 
 int main()
 {
     int A[]={1,2,3,4,5};
     LinkedList L(A,5);
+    L.insert(2,9);
+    cout<<"Delete :"<<L.Delete(6)<<endl;
     L.Display(); 
     cout<<"Length is:"<<L.Length()<<endl<<"Sum is:"<<L.max()<<endl;
     return 0;
 }
 
 LinkedList::LinkedList(int A[],int n){
-    Node *last , *t;
+    Node *t;
     int i=0;
 
     first= new Node;
@@ -95,5 +61,133 @@ LinkedList::LinkedList(int A[],int n){
 
     }
 
+LinkedList::~LinkedList(){
+            Node *temp=first;
+            while(temp!=NULL){
+                first=first->next;
+                delete temp;
+                temp=first;
+            }
+        };
 
+void LinkedList::Display(){
+            Node *temp=first;
+            cout<< first->data<<" "<<last->data<<endl;
+            while(temp!=NULL){
+                cout<<temp->data<<" ";
+                temp=temp->next;
+            }
+            cout<<endl;
+        };
 
+int LinkedList::Length(){
+            Node *temp=first;
+            int count=0;
+            while(temp!=NULL){
+                count++;
+                temp=temp->next;
+            }
+            return count;
+        };
+
+int LinkedList::Sum(){
+            Node *temp=first;
+            int sum=0;
+            while(temp!=NULL){
+                sum+= temp->data;
+                temp=temp->next;
+            }
+            return sum;
+        };
+
+int LinkedList::max(){
+            Node *temp=first;
+            int max=0;
+            while(temp!=NULL){
+                if(temp->data>max)
+                    max=temp->data;
+                temp=temp->next;
+            }
+            return max;
+        };
+
+void LinkedList::insertAtHead(int x){
+            Node *temp=new Node;
+            temp->data=x;
+            temp->next=first;
+            first=temp;
+        };
+
+void LinkedList::insertAtTail(int x){
+            Node *temp=new Node;
+            if(first==NULL){
+                temp->data=x;
+                first=temp;
+                last=temp;
+            }
+            else{
+                temp->data=x;
+                last->next=temp;
+                last=temp;
+                temp->next=NULL;
+            }
+            }
+
+void LinkedList::insert(int index,int x){
+
+    if(index==1){
+        insertAtHead(x);
+        return;
+    }
+    Node* temp=first;
+    int i=1;
+    while(i<index-1){
+        temp=temp->next;
+        i++;
+    }  
+    if(temp->next==NULL){
+        insertAtTail(x);
+        return ;
+    }
+
+        Node* element= new Node;
+        element->data=x;
+        element->next=temp->next;
+        temp->next = element;
+    
+};
+
+int LinkedList::Delete(int index){
+    Node *p,*q=NULL;
+    if(index<1 || index>Length()){return 0;}
+    int x=0;
+    if(index==1){
+        p=first;
+        first=p->next;
+        x=p->data;
+        p->next=NULL;
+        delete p;
+        return x;
+    }else{
+        p=first;
+        for(int i=1;i<index;i++){
+            q=p;
+            p=p->next;
+        }
+        if(p->next==NULL){
+            q->next=p->next;
+            x=p->data;
+            last=q;
+            p->next=NULL;
+            delete p;
+            return x;
+        }
+            q->next=p->next;
+            p->next=NULL;
+            x=p->data;
+            delete p;
+        
+    }
+    return x;
+
+}
