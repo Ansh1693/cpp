@@ -37,14 +37,42 @@ class LinkedList{
         };
         // void Insert(int index,int x);
         // int Delete(int index);
-        // int Length();
+        int Length(){
+            Node *temp=first;
+            int count=0;
+            while(temp!=NULL){
+                count++;
+                temp=temp->next;
+            }
+            return count;
+        };
+        int Sum(){
+            Node *temp=first;
+            int sum=0;
+            while(temp!=NULL){
+                sum+= temp->data;
+                temp=temp->next;
+            }
+            return sum;
+        };
+        int max(){
+            Node *temp=first;
+            int max=0;
+            while(temp!=NULL){
+                if(temp->data>max)
+                    max=temp->data;
+                temp=temp->next;
+            }
+            return max;
+        };
 };
 
 int main()
 {
     int A[]={1,2,3,4,5};
     LinkedList L(A,5);
-    L.Display();
+    L.Display(); 
+    cout<<"Length is:"<<L.Length()<<endl<<"Sum is:"<<L.max()<<endl;
     return 0;
 }
 
