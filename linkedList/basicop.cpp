@@ -29,6 +29,7 @@ class LinkedList{
         void insertAtTail(int x);
         void insert(int index,int x);
         int Delete(int index);
+        bool isSorted();
 };
 
 int main()
@@ -189,5 +190,19 @@ int LinkedList::Delete(int index){
         
     }
     return x;
+    
+}
 
+bool LinkedList::isSorted(){
+    Node* p=first;
+    int x=INT16_MIN;
+    while(p->next!=NULL){
+        if(p->data>x){
+            x=p->data;
+        }else{
+            return false;
+        }
+        p=p->next;
+    }
+    return true;
 }
