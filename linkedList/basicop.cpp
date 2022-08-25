@@ -30,15 +30,17 @@ class LinkedList{
         void insert(int index,int x);
         int Delete(int index);
         bool isSorted();
-        void removeDuplicatesSorted(); 
+        void removeDuplicatesSorted();
+        void reverseLink();
 };
 
 int main()
 {
     int A[]={1,2,3,4,5};
     LinkedList L(A,5);
-    L.insert(4,4);
-    cout<<"Delete :"<<L.Delete(6)<<endl;
+    // L.insert(4,4);
+    // cout<<"Delete :"<<L.Delete(6)<<endl;
+    L.reverseLink();
     L.Display(); 
     cout<<"Length is:"<<L.Length()<<endl<<"Sum is:"<<L.max()<<endl;
     return 0;
@@ -223,4 +225,18 @@ void LinkedList::removeDuplicatesSorted(){
             q=q->next;
         }
     }
+}
+
+void LinkedList::reverseLink(){
+    Node* p=first;
+    Node* q=NULL;
+    Node* r=NULL;
+    while(p!=NULL){
+        r=q;
+        q=p;
+        p=p->next;
+        q->next=r;
+    }
+    last=first;
+    first=q;
 }
