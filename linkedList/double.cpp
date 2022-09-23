@@ -16,7 +16,13 @@ class doubleList{
         Node* first;
         Node* last;
     public:
+        doubleList(){
+            first=NULL;
+            last=NULL;
+        }
         doubleList(int A[],int n){
+            if(n>0){
+
             Node *t;
             int i=0;
 
@@ -34,6 +40,7 @@ class doubleList{
                 t->prev=last;
                 last->next=t;
                 last=t;
+            }
             }
 
         }
@@ -55,12 +62,22 @@ class doubleList{
             cout<<endl;
         }
         void insertAtHead(int n){
-            Node *temp=new Node;
-            temp->data=n;
-            temp->prev=NULL;
-            temp->next=first;
-            first->prev=temp;
-            first=temp;
+            if(first==NULL){
+                Node *temp;
+                temp->data=n;
+                temp->next=NULL;
+                temp->prev=NULL;
+                first=temp;
+                last=temp;
+            
+            }else{
+                Node *temp=new Node;
+                temp->data=n;
+                temp->prev=NULL;
+                temp->next=first;
+                first->prev=temp;
+                first=temp;
+            }
         }
 
         void insertAtTail(int n){
@@ -147,11 +164,11 @@ class doubleList{
 int main()
 {
     int A[]={1,2,3,4,5};
-    doubleList D(A,5);
-    D.display();
+    doubleList D;
+    // D.display();
     D.insert(8,1);
     D.display();
-    D.insert(7,7);
+    D.insert(7,2);
     D.display();
     D.insert(6,3);
     D.display();
