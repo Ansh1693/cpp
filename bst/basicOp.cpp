@@ -67,7 +67,7 @@ class bst{
             }
             Node *r= root;
 
-            while(r!=NULL){
+         while(r!=NULL){
                 p=r;
                 if(key<r->data) r=r->left;
                 else if(key>r->data) r=r->right;
@@ -82,6 +82,59 @@ class bst{
             else p->right=t;
             return;
         }
+
+        int height(Node* p){
+            int x,y;
+            // Node* p = root;
+            if(p!=NULL){
+                x= height(p->left);
+                y= height(p->right);
+                return (x>y?x+1: y+1) ;
+            }
+            return 0;
+        };
+
+        Node* inPre(Node* p){
+            if(p && p->right==NULL) return p;
+            return inPre(p->right);
+        };
+
+        Node* inSuc(Node* p){
+            if(p && p->left == NULL) return p;
+
+            return inSuc(p->left);
+        };
+
+        Node* Delete(Node* p, int key){
+            Node* q;
+            if(p==NULL) return NULL;
+            
+            if(p->left==NULL && p->right==NULL){
+                if(p==root) root=NULL;
+                
+                free(p);
+                return NULL;
+            }
+
+            if(p->data>key) p->left=Delete(p->left, key);
+
+            else if(p->data<key) p->right= Delete(p->right, key);
+
+            else{
+                if(height(p->left)> height(p->right)){
+                    q= inPre(p->left);
+                    p->data=q->data;
+                    p->left=Delete(p->left, q->data);
+                }else{
+                    q= inSuc(p->right);
+                    p->data=q->data;
+                    p->right=Delete(p->right, q->data);
+                }
+            };
+            return p;
+
+        };
+
 };
 
 int main()
@@ -96,6 +149,15 @@ int main()
     A.insert(17);
     A.insert(25);
     A.inorder(A.root);
+    cout<<"\n";
     A.levelOrder(A.root);
+    cout<<"\n";
+
+    A.Delete(A.root,10);
+    A.inorder(A.root);
+    cout<<"\n";
+    A.levelOrder(A.root);
+    // A.inorder(A.root);
+
     return 0;
 }

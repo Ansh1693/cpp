@@ -38,8 +38,6 @@ int main()
 {
     int A[]={1,2,3,4,5};
     LinkedList L(A,5);
-    // L.insert(4,4);
-    // cout<<"Delete :"<<L.Delete(6)<<endl;
     L.reverseLink();
     L.Display(); 
     cout<<"Length is:"<<L.Length()<<endl<<"Sum is:"<<L.max()<<endl;
