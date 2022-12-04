@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<malloc.h>
+// #include<malloc.h>
 
 int binary(int arr[],int high , int low , int key){
     if(low>high) return -1;

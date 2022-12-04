@@ -66,7 +66,7 @@ struct Stack* stack = createStack(strlen(exp));
 		if(exp[i]==' ')continue;
 		
 		
-		else if (isdigit(exp[i]))
+		else if (exp[i]>='0' && exp[i]<='9')
 		{
 			int num=0;
 			
@@ -98,12 +98,12 @@ struct Stack* stack = createStack(strlen(exp));
 			
 			}
 			}else{
-				// if(!isalpha)
+
 				push(stack,val1);
 				push(stack,val2);
 			}
 			}else{
-				printf("gg");
+				// printf("gg");
 				return -999;
 			}
 		}

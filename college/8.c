@@ -80,7 +80,7 @@ struct node* create(struct node* head)
         printf("Enter the coef for term %d: \n",i+1);
         scanf("%f",&coef);
 
-        printf("Enter the powernent for term %d  \n",i+1);
+        printf("Enter the power for term %d  \n",i+1);
         scanf("%d", &power);
         head=insert(head,coef,power);
     }

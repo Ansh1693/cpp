@@ -12,7 +12,7 @@ struct stack
 void push(struct stack *st,int x);
 int pop(struct stack *st);
 int display(struct stack st);
-int peek(struct stack *st);
+int peep(struct stack *st);
 
 int main()
 {
@@ -32,7 +32,7 @@ int main()
 
     do
     {
-        printf("Select the following\n 1.push\n 2.pop\n 3.Exit\n");
+        printf("Select the following\n 1.push\n 2.pop\n 3.Peep\n4. Exit \n");
         scanf("%d",&x);
         switch(x){
 
