@@ -1,234 +1,245 @@
-// #include <stdio.h>
-// #include<stdlib.h>
-// #include<malloc.h>
-// #include <stdbool.h>
-
-// typedef struct graph_node{
-//     int data;
-    
-//     struct graph_node* next;
-// } graph_node;
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include<stdlib.h>
+#include<malloc.h>
 
 struct node
 {
-    int key;
-    struct node *left, *right;
+    int data;
+    struct node *next;
 };
 
-struct node *newNode(int x)
+struct node *llfront = NULL, *llrear = NULL;
+
+void llenqueue(int item)
 {
-    struct node *temp = (struct node *)malloc(sizeof(struct node));
-    temp->key = x;
-    temp->left = temp->right = NULL;
-    return temp;
+    struct node *temp = (struct node *)malloc(sizeof(struct node *));
+    temp->data = item;
+    temp->next = NULL;
+    if (llfront == NULL)
+    {
+        llfront = temp;
+        llrear = temp;
+        return;
+    }
+    llrear->next = temp;
+    llrear = temp;
 }
 
-void inorder(struct node *root)
-{
-    struct node *temp = root;
 
-    if (temp != NULL)
-    {
-        inorder(temp->left);
-        printf("%d->", temp->key);
-        inorder(temp->right);
-    }
-}
-void preorder(struct node *root)
+void lldequeue()
 {
-    struct node *temp = root;
-    if (temp != NULL)
+    if (llfront == NULL)
     {
-        printf("%d -> ", root->key);
-        preorder(root->left);
-        preorder(root->right);
+        return;
     }
-}
-void postorder(struct node *root)
-{
-    struct node *temp = root;
-    if (temp != NULL)
+    struct node *temp = llfront;
+    llfront = llfront->next;
+    if (llfront == NULL)
     {
-        postorder(temp->left);
-        postorder(temp->right);
-        printf("%d -> ", temp->key);
+        llrear = NULL;
     }
+
+    free(temp);
 }
 
-struct node *insert(struct node *node, int key)
+int llfr()
 {
-    if (node == NULL)
+    if (! llfront)
     {
-        return newNode(key);
+        return -1; 
     }
-
-    if (key < node->key)
-    {
-        node->left = insert(node->left, key);
-    }
-    else
-    {
-        node->right = insert(node->right, key);
-    }
-
-    return node;
+    return llfront->data;
 }
 
-struct node *minValueNode(struct node *node)
+
+
+struct AdjListNode {
+	int dest;
+	struct AdjListNode* next;
+};
+
+struct AdjList {
+	struct AdjListNode* head;
+};
+
+struct Graph {
+	int V;
+	struct AdjList* array;
+};
+
+struct AdjListNode* newAdjListNode(int dest)
 {
-    struct node *current = node;
-
-    while ( current->left != NULL)
-        current = current->left;
-
-    return current;
+	struct AdjListNode* newNode
+		= (struct AdjListNode*)malloc(
+			sizeof(struct AdjListNode));
+	newNode->dest = dest;
+	newNode->next = NULL;
+	return newNode;
 }
 
-struct node *deleteNode(struct node *root, int key)
+struct Graph* createGraph(int V)
 {
-    if (root == NULL)
-    {
-        return root;
-    }
+	struct Graph* graph
+		= malloc(sizeof(struct Graph));
+	graph->V = V;
 
-    if (key < root->key)
-    {
-        root->left = deleteNode(root->left, key);
-    }
-    else if (key > root->key)
-    {
-        root->right = deleteNode(root->right, key);
-    }
+	graph->array = (struct AdjList*)malloc(
+		(V+1) * sizeof(struct AdjList));
 
-    else
-    {
+	int i;
+	for (i = 1; i <=V; ++i)
+		graph->array[i].head = NULL;
 
-        if (root->left == NULL)
-        {
-            struct node *temp = root->right;
-            free(root);
-            return temp;
+	return graph;
+}
+
+void addEdge(struct Graph* graph, int src, int dest)
+{
+	struct AdjListNode* check = NULL;
+	struct AdjListNode* newNode = newAdjListNode(dest);
+
+	if (graph->array[src].head == NULL) {
+		newNode->next = graph->array[src].head;
+		graph->array[src].head = newNode;
+	}
+	else {
+
+		check = graph->array[src].head;
+		while (check->next != NULL) {
+			check = check->next;
+            if(check->dest == dest) break;
+		}
+        if(check->dest != dest){
+
+		    check->next = newNode;
         }
-        else if (root->right == NULL)
-        {
-            struct node *temp = root->left;
-            free(root);
-            return temp;
-        }
-        struct node *temp = minValueNode(root->right);
-        root->key = temp->key;
-        root->right = deleteNode(root->right, temp->key);
-    }
-    return root;
-}
-int search(struct node *root, int number)
-{
-    if (root == NULL)
-    {
-        return -1;
-    }
-    else if (number == root->key)
-    {
-        return root->key;
-    }
-    else if (number < root->key)
-    {
-        return search(root->left, number);
-    }
-    else if (number > root->key)
-    {
-        return search(root->right, number);
-    }
+	}
+
+	// newNode = newAdjListNode(src);
+	// if (graph->array[dest].head == NULL) {
+	// 	newNode->next = graph->array[dest].head;
+	// 	graph->array[dest].head = newNode;
+	// }
+	// else {
+	// 	check = graph->array[dest].head;
+	// 	while (check->next != NULL) {
+	// 		check = check->next;
+	// 	}
+	// 	check->next = newNode;
+	// }
+
 }
 
-int main()
+void printGraph(struct Graph* graph)
 {
-    struct node *root = NULL;
-    bool on = true;
-    while (on)
-    {
-        printf("\n1. Insertion\n");
-        printf("2. Deletion\n");
-        printf("3. Search\n");
-        printf("4. Traverse\n");
-        printf("5. Exit\n");
-        printf("\n");
+	int v;
+	for (v = 1; v <=graph->V; ++v) {
+		struct AdjListNode* pCrawl = graph->array[v].head;
+		printf("\n Adjacency list of vertex %d\n head ", v);
+		while (pCrawl) {
+			printf("-> %d", pCrawl->dest);
+			pCrawl = pCrawl->next;
+		}
+		printf("\n");
+	}
+}
 
-        int choice;
-        printf("Enter your choice : ");
-        scanf("%d", &choice);
-        printf("\n");
-        if (choice == 5)
-        {
-            on = false;
-            continue;
-        }
-        switch (choice)
-        {
-        case 1:
-            printf("Enter the key to insert : ");
-            int add;
-            scanf("%d", &add);
-            root = insert(root, add);
-
-            printf("BST traversal:");
-            inorder(root);
-            // printf('\n');
-            break;
-        case 2:
-            printf("Enter the key to delete : ");
-            int del;
-            scanf("%d", &del);
-            root = deleteNode(root, del);
-            printf("Deletion sucessfull\n");
-            printf("BST traversal:");
-            inorder(root);
-            // printf('/n');
-            break;
-        case 3:
-            printf("Enter the key to search : ");
-            int ser;
-            scanf("%d", &ser);
-            int find = -1;
-
-            find = search(root, ser);
-            if (find == -1)
-            {
-                printf("key is not present in tree\n");
+void bfs(struct Graph* graph , int n){
+    int visited[n+1];
+    for(int i=0;i<=n;i++){
+        visited[i]=0;
+    }
+    int s;
+    printf("Enter the source vertex: ");
+    scanf("%d",&s);
+    if(s>n || s<=0) {printf("Invalid source!!");return ;}
+    visited[s]=1;
+    llenqueue(s);
+    while(llfront){
+        int u = llfr();
+        printf("%d ",u);
+        lldequeue();
+        struct AdjListNode* pCrawl = graph->array[u].head;
+        while (pCrawl) {
+            if(visited[pCrawl->dest]==0){
+                visited[pCrawl->dest]=1;
+                llenqueue(pCrawl->dest);
             }
-            else
-            {
-                printf("key is present in tree\n");
-            }
-            break;
-        case 4:
-            printf("\n1. inorder\n");
-            printf("2. preorder\n");
-            printf("3. postorder\n");
-            int ch;
-            printf("Enter your choice : ");
-            scanf("%d", &ch);
-            if (ch == 1)
-            {
-                inorder(root);
-            }
-            else if (ch == 2)
-            {
-                preorder(root);
-            }
-            else
-            {
-                postorder(root);
-            }
-            break;
-        default:
-            printf("Invalid choice\n");
-            break;
+            pCrawl = pCrawl->next;
         }
     }
-    
 }
+void dfsSup(struct Graph* graph, int vis[], int src){
+    struct AdjListNode* pCrawl = graph->array[src].head;
+    vis[src]=1;
+    printf("%d ",src);
+    while (pCrawl) {
+        if(vis[pCrawl->dest]==0){
+            dfsSup(graph,vis,pCrawl->dest);
+        }
+        pCrawl = pCrawl->next;
+    }
+
+}
+void dfs(struct Graph* graph, int n){
+    int vis[n+1] ;
+    for(int i=0;i<=n;i++){
+        vis[i]=0;
+    }
+    int s;
+    printf("Enter the source vertex: ");
+    scanf("%d",&s);
+    if(s>n || s<=0) {printf("Invalid source!!");return ;}
+    dfsSup(graph,vis,s);
+}
+
+int main(){
+    int con;
+    printf("Type of Graph\n 1. Undirected Graph \n 2. Directed Graph \n");
+    scanf("%d",&con);
+
+    int n,m;
+    printf("Enter the number of vertices and edges: ");
+    scanf("%d %d",&n,&m);
+
+    struct Graph* graph =  createGraph(n);
+
+    int u , v;
+    printf("Enter %d edges: ",m);
+    for(int i=0;i<m;i++){
+        scanf("%d %d",&u,&v);
+        addEdge(graph,u,v);        
+        if(con==1){
+            addEdge(graph,v,u);
+        }
+    }
+    while(1){
+        int ch;
+        printf("\nEnter choice: \n 1. print adjaceny list \n 2. BFS Traversal \n 3. DFS Traversal \n 4. Exit");
+        scanf("%d",&ch);
+        switch(ch){
+            case 1: 
+                printf("\n Here is the graph list . . . \n");
+                printGraph(graph);
+                break;
+            case 2: 
+                printf("\n Here is the BFS graph traversal . . . \n ->");
+
+                bfs(graph,n);
+                break;
+            case 3: 
+                printf("\n Here is the DFS graph traversal . . . \n ->");
+                dfs(graph,n);
+                break;
+            case 4: exit(0);
+            default: printf("Invalid choice");
+        }
+    }
+
+
+    return 0;
+
+}
+
+
+  

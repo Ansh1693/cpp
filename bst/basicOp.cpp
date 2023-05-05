@@ -11,7 +11,7 @@ class Node{
         Node* right;
 
 };
-
+INT_
 class bst{
     private:
     

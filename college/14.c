@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<malloc.h>
 
+
 struct circular_queue{
     int size;
     int front;
